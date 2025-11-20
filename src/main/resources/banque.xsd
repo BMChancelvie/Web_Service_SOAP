@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://esmt.banque"
+           xmlns:tns="http://esmt.banque"
+           elementFormDefault="qualified">
+
+    <!-- Request -->
+    <xs:element name="getClientInfoRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="numeroTel" type="xs:long"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Response -->
+    <xs:element name="getClientInfoResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="clientInfo" type="tns:clientInfo"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Type ClientInfo -->
+    <xs:complexType name="clientInfo">
+        <xs:sequence>
+            <xs:element name="numeroTel" type="xs:long"/>
+            <xs:element name="solde" type="xs:long"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
