@@ -1,35 +1,42 @@
 package com.SOAP.DemoSoap;
 
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.ws.config.annotation.WsConfigurer;
+import org.springframework.ws.config.annotation.EnableWs;
+import org.springframework.ws.config.annotation.WsConfigurerAdapter;
+import org.springframework.ws.transport.http.MessageDispatcherServlet;
 import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
 import org.springframework.xml.xsd.SimpleXsdSchema;
 import org.springframework.xml.xsd.XsdSchema;
 
+@EnableWs
 @Configuration
-public class WebServiceConfig implements WsConfigurer {
+public class WebServiceConfig extends WsConfigurerAdapter {
 
-    // SUPPRIME tout le @Bean messageDispatcherServlet() ← C'EST ÇA LE PROBLÈME !
+    @Bean
+    public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(ApplicationContext context) {
+        MessageDispatcherServlet servlet = new MessageDispatcherServlet();
+        servlet.setApplicationContext(context);
+        servlet.setTransformWsdlLocations(true);
+        return new ServletRegistrationBean<>(servlet, "/ws/*");
+    }
 
+    
     @Bean(name = "banque")
     public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema banqueSchema) {
-        DefaultWsdl11Definition wsdl = new DefaultWsdl11Definition();
-        wsdl.setPortTypeName("BanquePort");
-        wsdl.setLocationUri("/ws");                    // endpoint accessible sur /ws/*
-        wsdl.setTargetNamespace("http://esmt.banque");
-        wsdl.setSchema(banqueSchema);
-        return wsdl;
+        DefaultWsdl11Definition definition = new DefaultWsdl11Definition();
+        definition.setPortTypeName("BanquePort");
+        definition.setLocationUri("/ws");           // très important
+        definition.setTargetNamespace("http://esmt.banque");
+        definition.setSchema(banqueSchema);
+        return definition;
     }
 
     @Bean
     public XsdSchema banqueSchema() {
         return new SimpleXsdSchema(new ClassPathResource("banque.xsd"));
-    }
-
-    // Méthode obligatoire (vide pour l'instant)
-    @Override
-    public void addInterceptors(java.util.List<org.springframework.ws.server.EndpointInterceptor> interceptors) {
     }
 }
