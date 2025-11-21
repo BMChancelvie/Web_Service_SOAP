@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<soap:Envelope 
-    xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+
+<soapenv:Envelope
+    xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
     xmlns:ban="http://esmt.banque">
-    
-    <soap:Header/>
-    
-    <soap:Body>
-        <!-- Opération que tu vas créer (ex: getClientInfo) -->
-        <ban:getClientInfo>
+    <soapenv:Header/>
+    <soapenv:Body>
+        <ban:getClientInfoRequest>
             <ban:numeroTel>777777777</ban:numeroTel>
-        </ban:getClientInfo>
-    </soap:Body>
-    
-</soap:Envelope>
+        </ban:getClientInfoRequest>
+    </soapenv:Body>
+</soapenv:Envelope>
